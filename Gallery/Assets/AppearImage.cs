@@ -2,7 +2,6 @@
 using UnityEngine;
 
 public class AppearImage : MonoBehaviour {
-
     
 
     private void OnTriggerEnter(Collider other)

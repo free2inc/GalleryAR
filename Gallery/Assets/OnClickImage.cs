@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class OnClickImage : MonoBehaviour
 {
-    static bool isPanelActive = false;
+    //static bool isPanelActive = false;
 
     public GameObject imagePanel;
     public GameObject image;
@@ -16,8 +16,10 @@ public class OnClickImage : MonoBehaviour
 
     private void Start()
     {
-        isPanelActive = false;
+        //isPanelActive = false;
         imagePanel.SetActive(false);
+
+        
 
     }
 
@@ -32,44 +34,54 @@ public class OnClickImage : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
-            //Debug.Log("PrivetUUUUUUUPPPP");
-            swipeDistance = new Vector2(Input.mousePosition.x - lastTouchPosition.x, Input.mousePosition.y - lastTouchPosition.y);
-            swipeDistance.Normalize();
-            if (swipeDistance.magnitude < 0.1)
-            {                
-                Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {                    
-                    //Debug.Log(hit.transform.GetComponent<SpriteRenderer>().color.a);
-                    if ((!isPanelActive) && (hit.transform.tag == "Image") && (hit.transform.GetComponent<SpriteRenderer>().color.a > 0.9f))
-                    {
-                        
-                        isPanelActive = true;
-                        imagePanel.SetActive(true);
-                        //FadeInPanel(imagePanel);
-                        image.GetComponent<Image>().sprite = hit.transform.GetComponent<SpriteRenderer>().sprite;
+            if (imagePanel.activeSelf)
+                imagePanel.SetActive(false);
+            else
+            {
+                swipeDistance = new Vector2(Input.mousePosition.x - lastTouchPosition.x, Input.mousePosition.y - lastTouchPosition.y);
+                swipeDistance.Normalize();
+                if (swipeDistance.magnitude < 0.1)
+                {                
+                    Ray ray = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit))
+                    {                    
+                        //Debug.Log(hit.transform.GetComponent<SpriteRenderer>().color.a);
+                        if ((!imagePanel.activeSelf) && (hit.transform.tag == "Image") && (hit.transform.GetComponent<SpriteRenderer>().color.a > 0.9f))
+                        {                        
+                            //isPanelActive = true;
+                            imagePanel.SetActive(true);
+                            //FadeInPanel(imagePanel);
+                            image.GetComponent<Image>().sprite = hit.transform.GetComponent<SpriteRenderer>().sprite;
+                        }
                     }
                 }
             }
+            
 
-        }        
+        }
+
+        
 
     }
 
     
 
 
+    //public void SetBoolPanelFalse()
+    //{
+    //    isPanelActive = false;
+    //    Debug.Log("isPanelActive: " + isPanelActive);
+    //}
 
-    public void SetBoolPanelFalse()
-    {
-        isPanelActive = false;
-        Debug.Log(isPanelActive);
-    }
+    //private void OnMouseUp()
+    //{
+        
+    //}
 
-    public static bool GetBoolPanelFalse()
-    {
-        return isPanelActive;
-    }
+    //public static bool GetBoolPanelFalse()
+    //{
+    //    return isPanelActive;
+    //}
 
 }

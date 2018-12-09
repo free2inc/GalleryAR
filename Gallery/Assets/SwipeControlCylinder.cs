@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using Vuforia;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SwipeControlCylinder : MonoBehaviour
 {
+    public GameObject imagePanel;
+
+    public GameObject debugText;
 
     public GameObject imageTarget;
 
@@ -17,7 +21,7 @@ public class SwipeControlCylinder : MonoBehaviour
     private Vector3 lastTouchPosition;
 
     private Vector2 swipeDistance;
-    private float tweakDistance = 0.5f; // можно немного менять - это чувствительность к направлению
+    private float MIN_DISTANCE = 0.05f;
 
 
     //private void Update()
@@ -55,12 +59,12 @@ public class SwipeControlCylinder : MonoBehaviour
 
 
 
-
     private void Update()
     {
 
 
-        if (!OnClickImage.GetBoolPanelFalse())
+        debugText.GetComponent<Text>().text = imageTarget.transform.eulerAngles.ToString();
+        if (!imagePanel.activeSelf)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -74,18 +78,21 @@ public class SwipeControlCylinder : MonoBehaviour
             {
                 //Debug.Log("PrivetUUUUUUUPPPP");
                 swipeDistance = new Vector2(Input.mousePosition.x - lastTouchPosition.x, Input.mousePosition.y - lastTouchPosition.y);
-                swipeDistance.Normalize();
+                swipeDistance.x /= Screen.width;
+                swipeDistance.y /= Screen.height;
 
+                debugText.GetComponent<Text>().text = swipeDistance.x + "   " + swipeDistance.y;
                 //if (((imageTarget.transform.eulerAngles.y >= 45f) && (imageTarget.transform.eulerAngles.y <= 135f))) //|| ((imageTarget.transform.eulerAngles.y >= 225f) && (imageTarget.transform.eulerAngles.y <= 315f)))
                 //{
                 //    float tmp = swipeDistance.x;
                 //    swipeDistance.x = swipeDistance.y;
                 //    swipeDistance.y = tmp;
                 //}
-
-                if ((swipeDistance.x < 0) && (swipeDistance.y > -tweakDistance) && (swipeDistance.y < tweakDistance))
+                
+                if ((swipeDistance.x < -MIN_DISTANCE))// && (swipeDistance.y > -MIN_DISTANCE) && (swipeDistance.y < MIN_DISTANCE))
                     direction = 1.0f;
-                else if ((swipeDistance.x > 0) && (swipeDistance.y > -tweakDistance) && (swipeDistance.y < tweakDistance))
+                
+                else if ((swipeDistance.x > MIN_DISTANCE))// && (swipeDistance.y > -MIN_DISTANCE) && (swipeDistance.y < MIN_DISTANCE))
                     direction = -1.0f;
                 else
                     direction = 0; // свайп куда-то вниз или вверх
