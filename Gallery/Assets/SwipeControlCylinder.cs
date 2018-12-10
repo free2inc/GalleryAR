@@ -11,6 +11,9 @@ public class SwipeControlCylinder : MonoBehaviour
     public GameObject debugText;
 
     public GameObject imageTarget;
+    
+
+    public bool onDefaultTrackableEventHandlerFOUND;
 
     //public GameObject[] images;
 
@@ -22,6 +25,7 @@ public class SwipeControlCylinder : MonoBehaviour
 
     private Vector2 swipeDistance;
     private float MIN_DISTANCE = 0.05f;
+    
 
 
     //private void Update()
@@ -64,24 +68,29 @@ public class SwipeControlCylinder : MonoBehaviour
 
 
         debugText.GetComponent<Text>().text = imageTarget.transform.eulerAngles.ToString();
-        if (!imagePanel.activeSelf)
+
+        if (DefaultTrackableEventHandler.targetFound && !imagePanel.activeSelf)
         {
             if (Input.GetMouseButtonDown(0))
             {
 
 
                 lastTouchPosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+                Debug.Log("lastTouchPosition: " + lastTouchPosition);
             }
 
 
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) )
             {
+                Debug.Log("imagePanel.activeSelf: " + imagePanel.activeSelf);
                 //Debug.Log("PrivetUUUUUUUPPPP");
                 swipeDistance = new Vector2(Input.mousePosition.x - lastTouchPosition.x, Input.mousePosition.y - lastTouchPosition.y);
                 swipeDistance.x /= Screen.width;
                 swipeDistance.y /= Screen.height;
 
-                debugText.GetComponent<Text>().text = swipeDistance.x + "   " + swipeDistance.y;
+                //debugText.GetComponent<Text>().text = swipeDistance.x + "   " + swipeDistance.y;
+
+
                 //if (((imageTarget.transform.eulerAngles.y >= 45f) && (imageTarget.transform.eulerAngles.y <= 135f))) //|| ((imageTarget.transform.eulerAngles.y >= 225f) && (imageTarget.transform.eulerAngles.y <= 315f)))
                 //{
                 //    float tmp = swipeDistance.x;
@@ -90,17 +99,25 @@ public class SwipeControlCylinder : MonoBehaviour
                 //}
                 
                 if ((swipeDistance.x < -MIN_DISTANCE))// && (swipeDistance.y > -MIN_DISTANCE) && (swipeDistance.y < MIN_DISTANCE))
+                {
                     direction = 1.0f;
+                }
+                    
                 
                 else if ((swipeDistance.x > MIN_DISTANCE))// && (swipeDistance.y > -MIN_DISTANCE) && (swipeDistance.y < MIN_DISTANCE))
+                {
                     direction = -1.0f;
+                }
+                    
                 else
+                {
                     direction = 0; // свайп куда-то вниз или вверх
+                }
+                   
 
                 if ((imageTarget.transform.eulerAngles.y >= 90f) && (imageTarget.transform.eulerAngles.y <= 270f))
                 {
                     direction = -direction;
-                    //Debug.Log("Changed direction");
                 }
 
                 if (Mathf.Abs(direction) > 0) // если это НЕ свайп куда-то вниз или вверх, тогда запускаем вращение

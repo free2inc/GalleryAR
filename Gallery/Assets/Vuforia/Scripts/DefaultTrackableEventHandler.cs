@@ -17,6 +17,15 @@ using Vuforia;
 /// </summary>
 public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 {
+
+    // swipeControl change state
+
+    public static bool targetFound;
+
+    
+
+
+
     #region PROTECTED_MEMBER_VARIABLES
 
     protected TrackableBehaviour mTrackableBehaviour;
@@ -24,12 +33,16 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
     protected TrackableBehaviour.Status m_NewStatus;
 
 
+    //audio play
     public AudioSource audio;
     bool Playing = false;
+
+
 
     #endregion // PROTECTED_MEMBER_VARIABLES
 
     #region UNITY_MONOBEHAVIOUR_METHODS
+    
 
     protected virtual void Start()
     {
@@ -88,6 +101,8 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
 
     protected virtual void OnTrackingFound()
     {
+        targetFound = true;
+
         var rendererComponents = GetComponentsInChildren<Renderer>(true);
         var colliderComponents = GetComponentsInChildren<Collider>(true);
         var canvasComponents = GetComponentsInChildren<Canvas>(true);
@@ -112,13 +127,15 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
             
         audio.mute = false;
 
-
+        
 
     }
 
 
     protected virtual void OnTrackingLost()
     {
+        targetFound = false;
+
         var rendererComponents = GetComponentsInChildren<Renderer>(true);
         var colliderComponents = GetComponentsInChildren<Collider>(true);
         var canvasComponents = GetComponentsInChildren<Canvas>(true);
@@ -136,6 +153,8 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
             component.enabled = false;
 
         audio.mute = true;
+
+        
     }
 
     #endregion // PROTECTED_METHODS
